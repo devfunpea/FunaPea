@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fun pea</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            color: #000;
+            transition: background-color 0.3s, color 0.3s;
+            position: relative;
+        }
+
+        #funpea {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            transition: color 0.3s;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+            margin: 5px;
+            z-index: 10;
+        }
+
+        #darkModeButton {
+            background-color: #007bff;
+            color: #fff;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+
+        #darkModeButton:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #darkModeButton.dark-mode {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        #darkModeButton.dark-mode:hover {
+            background-color: #212529;
+        }
+
+        #openTabButton {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        #openTabButton:hover {
+            background-color: #218838;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #ticTacToeButton {
+            background-color: #ff5722;
+            color: #fff;
+        }
+
+        #ticTacToeButton:hover {
+            background-color: #e64a19;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #hangmanButton {
+            background-color: #6f42c1;
+            color: #fff;
+        }
+
+        #hangmanButton:hover {
+            background-color: #5a2c9f;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="funpea">Fun Pea</div>
+    <button id="darkModeButton">☀️</button>
+    <button id="ticTacToeButton">Tic Tac Toe</button>
+    <button id="hangmanButton">Hangman</button>
+    <button id="cookieClickerButton">Cookie Clicker</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeButton = document.getElementById('darkModeButton');
+            const funPeaText = document.getElementById('funpea');
+            const openTabButton = document.getElementById('openTabButton');
+            const ticTacToeButton = document.getElementById('ticTacToeButton');
+            const hangmanButton = document.getElementById('hangmanButton');
+            const cookieClickerButton = document.getElementById('cookieClickerButton');
+            let darkMode = false;
+
+            darkModeButton.addEventListener('click', () => {
+                darkMode = !darkMode;
+                if (darkMode) {
+                    document.body.style.backgroundColor = '#333';
+                    document.body.style.color = '#fff';
+                    funPeaText.style.color = '#fff'; // Change Fun Pea text color to white
+                    darkModeButton.classList.add('dark-mode');
+                    darkModeButton.textContent = '🌙'; // Change to moon emoji
+                } else {
+                    document.body.style.backgroundColor = '#f0f0f0';
+                    document.body.style.color = '#000';
+                    funPeaText.style.color = '#000'; // Change Fun Pea text color back to black
+                    darkModeButton.classList.remove('dark-mode');
+                    darkModeButton.textContent = '☀️'; // Change to sun emoji
+                }
+            });
+
+        
+
+            ticTacToeButton.addEventListener('click', () => {
+                window.open('tic-tac-toe.html', '_blank'); // Make sure 'tic-tac-toe.html' is the correct path
+            });
+
+            hangmanButton.addEventListener('click', () => {
+                window.open('hangman.html', '_blank'); // Make sure 'hangman.html' is the correct path
+            });
+
+            cookieClickerButton.addEventListener('click', () => {
+                window.open('cookie.html', '_blank'); // Make sure 'cookie-clicker.html' is the correct path
+            });
+        });
+    </script>
+</body>
