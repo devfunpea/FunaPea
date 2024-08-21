@@ -6,7 +6,7 @@
     <title>Tic Tac Toe Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -17,6 +17,8 @@
             color: #000;
             transition: background-color 4s;
         }
+
+  
 
         #menu, #gameContainer {
             display: none;
@@ -31,42 +33,60 @@
         }
 
         #menu button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            background-color: #007bff;
+            font-size: 18px;
+            font-weight: 500;
+            margin: 15px;
+            background: linear-gradient(145deg, #007bff, #0056b3);
             color: #fff;
-            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, box-shadow 0.3s;
         }
 
         #menu button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(145deg, #0056b3, #004494);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
 
         #ticTacToeBoard {
             display: grid;
             grid-template-columns: repeat(3, 100px);
             grid-template-rows: repeat(3, 100px);
-            gap: 5px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .cell {
             width: 100px;
             height: 100px;
             background-color: #fff;
-            border: 2px solid #000;
+            border: none;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 36px;
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
             cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
         }
 
         .cell:hover {
             background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .cell.X {
+            color: #007bff;
+        }
+
+        .cell.O {
+            color: #ff5722;
         }
 
         #status {
@@ -76,18 +96,26 @@
         }
 
         #resetButton, #returnButton {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 16px;
-            background-color: #007bff;
+            font-size: 18px;
+            font-weight: 500;
+            background: linear-gradient(145deg, #007bff, #0056b3);
             color: #fff;
-            transition: background-color 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s, box-shadow 0.3s;
+            margin: 10px;
         }
 
         #resetButton:hover, #returnButton:hover {
-            background-color: #0056b3;
+            background: linear-gradient(145deg, #0056b3, #004494);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #returnButton {
+            margin-top: 20px; /* Adds space between the reset and return button */
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@latest/dist/confetti.browser.min.js"></script>
@@ -126,6 +154,15 @@
         const returnButton = document.getElementById('returnButton');
         const playWithComputerButton = document.getElementById('playWithComputer');
         const twoPlayersButton = document.getElementById('twoPlayers');
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
+
+            if (darkMode) {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+            }
+         }); 
+
 
         let currentPlayer = 'X';
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
@@ -153,6 +190,7 @@
 
             gameBoard[index] = currentPlayer;
             e.target.textContent = currentPlayer;
+            e.target.classList.add(currentPlayer);
 
             if (checkWin()) {
                 if (currentPlayer === 'X') {
@@ -206,6 +244,7 @@
                 if (checkWin(tempBoard)) {
                     gameBoard[move] = 'O';
                     cells[move].textContent = 'O';
+                    cells[move].classList.add('O');
                     status.textContent = 'Computer Wins!';
                     document.body.style.backgroundColor = 'red';
                     setTimeout(() => document.body.style.backgroundColor = '#f0f0f0', 4000);
@@ -221,6 +260,7 @@
                 if (checkWin(tempBoard)) {
                     gameBoard[move] = 'O';
                     cells[move].textContent = 'O';
+                    cells[move].classList.add('O');
                     status.textContent = `Player ${currentPlayer}'s Turn`;
                     return;
                 }
@@ -230,6 +270,7 @@
             const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
             gameBoard[randomMove] = 'O';
             cells[randomMove].textContent = 'O';
+            cells[randomMove].classList.add('O');
 
             if (checkWin()) {
                 status.textContent = 'Computer Wins!';
@@ -252,7 +293,10 @@
 
         function resetGame() {
             gameBoard = ['', '', '', '', '', '', '', '', ''];
-            cells.forEach(cell => cell.textContent = '');
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('X', 'O');
+            });
             currentPlayer = 'X';
             gameActive = true;
             status.textContent = `Player ${currentPlayer}'s Turn`;
