@@ -128,10 +128,16 @@
         document.addEventListener('DOMContentLoaded', () => {
             const darkModeButton = document.getElementById('darkModeButton');
             const funPeaText = document.getElementById('funpea');
-            const ticTacToeButton = document.getElementById('ticTacToeButton');
-            const hangmanButton = document.getElementById('hangmanButton');
-            const cookieClickerButton = document.getElementById('cookieClickerButton');
-            let darkMode = false;
+            let darkMode = JSON.parse(localStorage.getItem('darkMode')) || false;
+
+            // Apply saved dark mode preference on page load
+            if (darkMode) {
+                document.body.style.backgroundColor = '#333';
+                document.body.style.color = '#fff';
+                funPeaText.style.color = '#fff';
+                darkModeButton.classList.add('dark-mode');
+                darkModeButton.textContent = '🌙'; // Change to moon emoji
+            }
 
             darkModeButton.addEventListener('click', () => {
                 darkMode = !darkMode;
@@ -148,17 +154,18 @@
                     darkModeButton.classList.remove('dark-mode');
                     darkModeButton.textContent = '☀️'; // Change to sun emoji
                 }
+                localStorage.setItem('darkMode', JSON.stringify(darkMode));
             });
 
-            ticTacToeButton.addEventListener('click', () => {
+            document.getElementById('ticTacToeButton').addEventListener('click', () => {
                 window.open('tic-tac-toe.html', '_blank');
             });
 
-            hangmanButton.addEventListener('click', () => {
+            document.getElementById('hangmanButton').addEventListener('click', () => {
                 window.open('hangman.html', '_blank');
             });
 
-            cookieClickerButton.addEventListener('click', () => {
+            document.getElementById('cookieClickerButton').addEventListener('click', () => {
                 window.open('cookie.html', '_blank');
             });
         });
