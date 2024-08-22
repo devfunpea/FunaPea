@@ -1,35 +1,30 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const bird = {
-    x: 50,
-    y: canvas.height / 2,
-    width: 40,
-    height: 40,
-    gravity: 1, // Increased gravity for more realistic fall
-    lift: -10, // Increased lift for a stronger jump
-    velocity: 0
-};
+// Load high score from localStorage
+let highScore = parseInt(localStorage.getItem('highScore')) || 0;
 
+// Initialize game variables
+const bird = { x: 50, y: canvas.height / 2, width: 40, height: 40, gravity: 0.6, lift: -10, velocity: 0 };
 let pipes = [];
-const pipeWidth = 50;
-const pipeGap = 150;
-const pipeFrequency = 90;
+const basePipeWidth = 50;
+const pipeGap = 200;
+let pipeFrequency = 90;
 let frameCount = 0;
 let score = 0;
-let highScore = 0;
 let gamePaused = false;
+let fallingAnimation = false;
+let fallingFrameCount = 0;
 
 function handleInput() {
-    if (!gamePaused) {
+    if (!gamePaused && !fallingAnimation) {
         bird.velocity = bird.lift;
     }
 }
 
-// Add event listeners for keyboard and touchscreen controls
 document.addEventListener('keydown', handleInput);
 document.addEventListener('touchstart', (event) => {
-    event.preventDefault(); // Prevent default touch behavior
+    event.preventDefault();
     handleInput();
 });
 
@@ -41,33 +36,34 @@ function drawBird() {
 function drawPipes() {
     ctx.fillStyle = 'green';
     pipes.forEach(pipe => {
-        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.height);
-        ctx.fillRect(pipe.x, pipe.height + pipeGap, pipeWidth, canvas.height - pipe.height - pipeGap);
+        ctx.fillRect(pipe.x, 0, pipe.width, pipe.height);
+        ctx.fillRect(pipe.x, pipe.height + pipeGap, pipe.width, canvas.height - pipe.height - pipeGap);
     });
 }
 
 function updatePipes() {
     if (frameCount % pipeFrequency === 0) {
-        const height = Math.floor(Math.random() * (canvas.height - pipeGap - 100)) + 50; // Ensure pipes are within canvas height
-        pipes.push({ x: canvas.width, height });
+        const height = Math.floor(Math.random() * (canvas.height - pipeGap - 100)) + 50;
+        const width = basePipeWidth + (score >= 20 ? 20 : 0);
+        pipes.push({ x: canvas.width, width, height });
     }
     pipes.forEach(pipe => {
         pipe.x -= 2;
     });
-    pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
+    pipes = pipes.filter(pipe => pipe.x + pipe.width > 0);
 }
 
 function detectCollision() {
     pipes.forEach(pipe => {
-        if (bird.x < pipe.x + pipeWidth &&
-            bird.x + bird.width > pipe.x &&
+        if (bird.x < pipe.x + pipe.width && bird.x + bird.width > pipe.x &&
             (bird.y < pipe.height || bird.y + bird.height > pipe.height + pipeGap)) {
+            fallingAnimation = true; // Trigger falling animation
             gamePaused = true;
             document.getElementById('score').textContent = `Score: ${score}`;
             document.getElementById('restart-score').textContent = `Score: ${score}`;
             setTimeout(() => {
                 shakeCanvas();
-                bird.velocity = 0; // Stop vertical movement upon collision
+                bird.velocity = 0;
             }, 100);
             setTimeout(() => {
                 document.getElementById('restart').style.display = 'block';
@@ -75,12 +71,13 @@ function detectCollision() {
         }
     });
     if (bird.y + bird.height > canvas.height || bird.y < 0) {
+        fallingAnimation = true; // Trigger falling animation
         gamePaused = true;
         document.getElementById('score').textContent = `Score: ${score}`;
         document.getElementById('restart-score').textContent = `Score: ${score}`;
         setTimeout(() => {
             shakeCanvas();
-            bird.velocity = 0; // Stop vertical movement upon collision
+            bird.velocity = 0;
         }, 100);
         setTimeout(() => {
             document.getElementById('restart').style.display = 'block';
@@ -103,13 +100,24 @@ function shakeCanvas() {
 
 function updateScore() {
     pipes.forEach(pipe => {
-        if (pipe.x + pipeWidth === bird.x) {
+        if (pipe.x + pipe.width === bird.x) {
             score++;
             if (score > highScore) {
                 highScore = score;
+                localStorage.setItem('highScore', highScore);
                 document.getElementById('highscore').textContent = `High Score: ${highScore}`;
             }
             document.getElementById('score').textContent = `Score: ${score}`;
+            if (score >= 20) {
+                pipeFrequency = 80;
+                if (score >= 30) pipeFrequency = 70;
+                if (score >= 40) pipeFrequency = 60;
+                if (score >= 50) pipeFrequency = 50;
+                if (score >= 60) pipeFrequency = 40;
+                if (score >= 70) pipeFrequency = 30;
+                if (score >= 80) pipeFrequency = 20;
+                if (score >= 90) pipeFrequency = 15;
+            }
         }
     });
 }
@@ -122,6 +130,8 @@ function resetGame() {
     document.getElementById('score').textContent = `Score: ${score}`;
     document.getElementById('restart').style.display = 'none';
     gamePaused = false;
+    fallingAnimation = false; // Reset falling animation
+    fallingFrameCount = 0;
 }
 
 function gameLoop() {
@@ -141,9 +151,31 @@ function gameLoop() {
         updateScore();
 
         frameCount++;
+    } else if (fallingAnimation) {
+        // Animate falling effect
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawPipes(); // Show pipes during falling animation
+
+        bird.velocity += bird.gravity; // Apply gravity effect
+        bird.y += bird.velocity; // Move bird based on velocity
+
+        if (bird.y + bird.height > canvas.height) {
+            bird.y = canvas.height - bird.height; // Stop falling at bottom boundary
+            bird.velocity = 0; // Stop the bird's vertical movement
+            fallingAnimation = false;
+            gamePaused = true; // Keep the game paused after animation
+        }
+
+        drawBird();
+        requestAnimationFrame(gameLoop);
+        return; // Skip normal game loop if animating falling
     }
 
     requestAnimationFrame(gameLoop);
 }
+
+
+// Initialize high score display
+document.getElementById('highscore').textContent = `High Score: ${highScore}`;
 
 gameLoop();
