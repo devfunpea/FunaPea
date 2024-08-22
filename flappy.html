@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Flappy Bird Clone</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #87CEEB;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        canvas {
+            border: 2px solid #000;
+        }
+
+        #score, #highscore {
+            font-size: 24px;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 0 #000000;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        #highscore {
+            top: 60px;
+        }
+
+        #restart {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        #restart button {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 24px;
+            background: linear-gradient(145deg, #007BFF, #0056b3);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.3), -4px -4px 8px rgba(255,255,255,0.3);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        #restart button:hover {
+            background: linear-gradient(145deg, #0056b3, #007BFF);
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.4), -4px -4px 8px rgba(255,255,255,0.4);
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <div id="highscore">High Score: 0</div>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="restart">
+        <div id="restart-score">Score: 0</div>
+        <button onclick="resetGame()">Restart</button>
+    </div>
+    <script src="flappy.js"></script>
+</body>
+</html>
