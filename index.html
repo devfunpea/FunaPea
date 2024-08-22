@@ -105,7 +105,7 @@
             background: linear-gradient(145deg, #5a2c9f, #4a1d80);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
-        
+
         #cookieClickerButton {
             background: linear-gradient(145deg, #ff9800, #f57c00);
             color: #fff;
@@ -113,6 +113,16 @@
 
         #cookieClickerButton:hover {
             background: linear-gradient(145deg, #f57c00, #e64a19);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        #clappyBirdButton {
+            background: linear-gradient(145deg, #28a745, #218838);
+            color: #fff;
+        }
+
+        #clappyBirdButton:hover {
+            background: linear-gradient(145deg, #218838, #1e7e34);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
     </style>
@@ -123,6 +133,7 @@
     <button id="ticTacToeButton">Tic Tac Toe</button>
     <button id="hangmanButton">Hangman</button>
     <button id="cookieClickerButton">Cookie Clicker</button>
+    <button id="clappyBirdButton">Clappy Bird</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -167,6 +178,10 @@
 
             document.getElementById('cookieClickerButton').addEventListener('click', () => {
                 window.open('cookie.html', '_blank');
+            });
+
+            document.getElementById('clappyBirdButton').addEventListener('click', () => {
+                window.open('flappy.html', '_blank');
             });
         });
     </script>
