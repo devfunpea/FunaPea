@@ -13,8 +13,8 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
-            color: #000;
+            background-color: #e0e0e0;
+            color: #333;
             transition: background-color 0.3s, color 0.3s;
             position: relative;
         }
@@ -34,13 +34,13 @@
             border: none;
             border-radius: 12px;
             cursor: pointer;
-            font-size: 18px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: 600;
             transition: background-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
             margin: 10px;
             z-index: 10;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             outline: none;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), inset 2px 2px 5px rgba(255, 255, 255, 0.3);
         }
 
         button:active {
@@ -48,42 +48,43 @@
         }
 
         #darkModeButton {
-            background: linear-gradient(145deg, #007bff, #0056b3);
+            background: linear-gradient(145deg, #4a90e2, #357abd);
             color: #fff;
             position: absolute;
             bottom: 20px;
             left: 20px;
-            font-size: 28px;
+            font-size: 24px;
             width: 60px;
             height: 60px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 50%;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), inset 2px 2px 5px rgba(255, 255, 255, 0.3);
         }
 
         #darkModeButton:hover {
-            background: linear-gradient(145deg, #0056b3, #004494);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(145deg, #357abd, #2a5d8c);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
         }
 
         #darkModeButton.dark-mode {
-            background: linear-gradient(145deg, #343a40, #212529);
+            background: linear-gradient(145deg, #212121, #333);
             color: #fff;
         }
 
         #darkModeButton.dark-mode:hover {
-            background: linear-gradient(145deg, #212529, #1c1e1f);
+            background: linear-gradient(145deg, #333, #212121);
         }
 
         #openTabButton {
-            background: linear-gradient(145deg, #28a745, #218838);
+            background: linear-gradient(145deg, #5cb85c, #4cae4c);
             color: #fff;
         }
 
         #openTabButton:hover {
-            background: linear-gradient(145deg, #218838, #1e7e34);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(145deg, #4cae4c, #3e8e41);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         #ticTacToeButton {
@@ -93,7 +94,7 @@
 
         #ticTacToeButton:hover {
             background: linear-gradient(145deg, #e64a19, #d84315);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         #hangmanButton {
@@ -103,7 +104,7 @@
 
         #hangmanButton:hover {
             background: linear-gradient(145deg, #5a2c9f, #4a1d80);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         #cookieClickerButton {
@@ -113,17 +114,17 @@
 
         #cookieClickerButton:hover {
             background: linear-gradient(145deg, #f57c00, #e64a19);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         #clappyBirdButton {
-            background: linear-gradient(145deg, #28a745, #218838);
+            background: linear-gradient(145deg, #5cb85c, #4cae4c);
             color: #fff;
         }
 
         #clappyBirdButton:hover {
-            background: linear-gradient(145deg, #218838, #1e7e34);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(145deg, #4cae4c, #3e8e41);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -159,8 +160,8 @@
                     darkModeButton.classList.add('dark-mode');
                     darkModeButton.textContent = '🌙'; // Change to moon emoji
                 } else {
-                    document.body.style.backgroundColor = '#f0f0f0';
-                    document.body.style.color = '#000';
+                    document.body.style.backgroundColor = '#e0e0e0';
+                    document.body.style.color = '#333';
                     funPeaText.style.color = '#333';
                     darkModeButton.classList.remove('dark-mode');
                     darkModeButton.textContent = '☀️'; // Change to sun emoji
@@ -186,3 +187,4 @@
         });
     </script>
 </body>
+</html>
