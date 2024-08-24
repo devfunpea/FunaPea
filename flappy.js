@@ -5,7 +5,16 @@ const ctx = canvas.getContext('2d');
 let highScore = parseInt(localStorage.getItem('highScore')) || 0;
 
 // Initialize game variables
-const bird = { x: 50, y: canvas.height / 2, width: 40, height: 40, gravity: 0.6, lift: -10, velocity: 0 };
+const bird = { 
+    x: 50, 
+    y: canvas.height / 2, 
+    width: 40, 
+    height: 40, 
+    gravity: 0.6, 
+    lift: -12, 
+    velocity: 0
+};
+
 let pipes = [];
 const basePipeWidth = 50;
 const pipeGap = 200;
@@ -14,7 +23,19 @@ let frameCount = 0;
 let score = 0;
 let gamePaused = false;
 let fallingAnimation = false;
-let fallingFrameCount = 0;
+
+// GIF Animation for Bird
+const birdGif = new Image();
+birdGif.src = 'https://piskel-imgstore-b.appspot.com/img/077bd11e-6203-11ef-9e2e-cdc1aae8f3b8.gif'; // Update with your GIF path
+
+birdGif.onload = () => {
+    console.log('Bird GIF loaded successfully');
+    gameLoop(); // Start the game loop once the GIF is loaded
+};
+
+birdGif.onerror = (err) => {
+    console.error('Error loading GIF:', err);
+};
 
 function handleInput() {
     if (!gamePaused && !fallingAnimation) {
@@ -29,8 +50,12 @@ document.addEventListener('touchstart', (event) => {
 });
 
 function drawBird() {
-    ctx.fillStyle = 'yellow';
-    ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+    // Draw the bird GIF
+    ctx.drawImage(birdGif, bird.x, bird.y, bird.width, bird.height);
+
+    // Optional: Draw a border around the bird for visibility
+    // ctx.strokeStyle = 'red';
+    // ctx.strokeRect(bird.x, bird.y, bird.width, bird.height);
 }
 
 function drawPipes() {
@@ -87,6 +112,7 @@ function detectCollision() {
 
 function shakeCanvas() {
     let shakeCount = 0;
+    const shakeAmount = 10;
     const interval = setInterval(() => {
         if (shakeCount >= 10) {
             clearInterval(interval);
@@ -94,7 +120,9 @@ function shakeCanvas() {
             return;
         }
         shakeCount++;
-        canvas.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px)`;
+        const x = (Math.random() - 0.5) * shakeAmount;
+        const y = (Math.random() - 0.5) * shakeAmount;
+        canvas.style.transform = `translate(${x}px, ${y}px)`;
     }, 50);
 }
 
@@ -125,13 +153,12 @@ function updateScore() {
 function resetGame() {
     bird.y = canvas.height / 2;
     bird.velocity = 0;
-    pipes = [];
+    pipes = []; // Preserve pipes but reset their positions
     score = 0;
     document.getElementById('score').textContent = `Score: ${score}`;
     document.getElementById('restart').style.display = 'none';
     gamePaused = false;
     fallingAnimation = false; // Reset falling animation
-    fallingFrameCount = 0;
 }
 
 function gameLoop() {
@@ -154,7 +181,7 @@ function gameLoop() {
     } else if (fallingAnimation) {
         // Animate falling effect
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawPipes(); // Show pipes during falling animation
+        drawBird(); // Draw the bird during falling animation
 
         bird.velocity += bird.gravity; // Apply gravity effect
         bird.y += bird.velocity; // Move bird based on velocity
@@ -166,7 +193,6 @@ function gameLoop() {
             gamePaused = true; // Keep the game paused after animation
         }
 
-        drawBird();
         requestAnimationFrame(gameLoop);
         return; // Skip normal game loop if animating falling
     }
@@ -174,8 +200,5 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-
 // Initialize high score display
 document.getElementById('highscore').textContent = `High Score: ${highScore}`;
-
-gameLoop();
