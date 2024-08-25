@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smooth Snake Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #4caf50;
+            font-size: 2rem;
+        }
+
+        canvas {
+            border: 3px solid #4caf50;
+            background-color: #1e1e1e;
+            width: 85vw;
+            height: 85vw;
+            max-width: 500px;
+            max-height: 500px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4caf50;
+        }
+
+        #highScore {
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            font-size: 1.2rem;
+            color: #4caf50;
+        }
+
+        #restartButton {
+            display: none;
+            width: 100px;
+            height: 100px;
+            background-image: url('reset.png'); /* Path to your restart button image */
+            background-size: cover;
+            background-color: transparent;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        #restartButton:hover {
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        #restartButton.shake {
+            animation: shake 0.6s ease;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(-50%, -50%) translateX(-10px); }
+            25% { transform: translate(-50%, -50%) translateX(10px); }
+            50% { transform: translate(-50%, -50%) translateX(-10px); }
+            75% { transform: translate(-50%, -50%) translateX(10px); }
+            100% { transform: translate(-50%, -50%) translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <h1>Smooth Snake Game</h1>
+    <canvas id="gameCanvas"></canvas>
+    <div id="score">Score: 0</div>
+    <div id="highScore">High Score: 0</div>
+    <button id="restartButton"></button>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const grid = 20;
+        const speed = 1000 / 15;
+        let snake = [{ x: 160, y: 160 }];
+        let apple = { x: 80, y: 80 };
+        let dx = grid;
+        let dy = 0;
+        let changingDirection = false;
+        let score = 0;
+        let highScore = parseInt(localStorage.getItem('highScore')) || 0;
+        let lastRenderTime = 0;
+        const appleImg = new Image();
+        appleImg.src = 'city.png'; // Path to your apple image
+        const appleSize = 20;
+
+        const restartButton = document.getElementById('restartButton');
+        const scoreDisplay = document.getElementById('score');
+        const highScoreDisplay = document.getElementById('highScore');
+
+        let gameRunning = true;
+
+        function resizeCanvas() {
+            canvas.width = Math.min(window.innerWidth * 0.85, 500);
+            canvas.height = canvas.width;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#4caf50';
+            snake.forEach(segment => ctx.fillRect(segment.x, segment.y, grid, grid));
+            ctx.drawImage(appleImg, apple.x, apple.y, appleSize, appleSize);
+            scoreDisplay.textContent = 'Score: ' + score;
+            highScoreDisplay.textContent = 'High Score: ' + highScore;
+        }
+
+        function update() {
+            if (!gameRunning) return;
+
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                gameRunning = false;
+                showRestartButton();
+                return;
+            }
+            snake.unshift(head);
+            if (head.x < apple.x + appleSize &&
+                head.x + grid > apple.x &&
+                head.y < apple.y + appleSize &&
+                head.y + grid > apple.y) {
+                score++;
+                placeApple();
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('highScore', highScore);
+                }
+            } else {
+                snake.pop();
+            }
+            changingDirection = false;
+        }
+
+        function placeApple() {
+            apple.x = Math.floor(Math.random() * (canvas.width / appleSize)) * appleSize;
+            apple.y = Math.floor(Math.random() * (canvas.height / appleSize)) * appleSize;
+        }
+
+        function resetGame() {
+            snake = [{ x: 160, y: 160 }];
+            dx = grid;
+            dy = 0;
+            score = 0;
+            placeApple();
+            hideRestartButton();
+            gameRunning = true;
+        }
+
+        function showRestartButton() {
+            restartButton.style.display = 'block';
+            restartButton.classList.add('shake');
+        }
+
+        function hideRestartButton() {
+            restartButton.style.display = 'none';
+            restartButton.classList.remove('shake');
+        }
+
+        function gameLoop(currentTime) {
+            if (currentTime - lastRenderTime >= speed) {
+                update();
+                draw();
+                lastRenderTime = currentTime;
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function changeDirection(event) {
+            if (!gameRunning || changingDirection) return;
+            changingDirection = true;
+            const key = event.code;
+            if (key === 'ArrowUp' && dy === 0) {
+                dx = 0;
+                dy = -grid;
+            } else if (key === 'ArrowDown' && dy === 0) {
+                dx = 0;
+                dy = grid;
+            } else if (key === 'ArrowLeft' && dx === 0) {
+                dx = -grid;
+                dy = 0;
+            } else if (key === 'ArrowRight' && dx === 0) {
+                dx = grid;
+                dy = 0;
+            }
+        }
+
+        function handleScroll(event) {
+            if (!gameRunning) return;
+            if (event.deltaY < 0) {
+                // Scroll up
+                if (dy === 0) {
+                    dx = 0;
+                    dy = -grid;
+                }
+            } else if (event.deltaY > 0) {
+                // Scroll down
+                if (dy === 0) {
+                    dx = 0;
+                    dy = grid;
+                }
+            }
+        }
+
+        window.addEventListener('wheel', handleScroll);
+
+        document.addEventListener('keydown', (event) => {
+            changeDirection(event);
+        });
+
+        restartButton.addEventListener('click', resetGame);
+
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
