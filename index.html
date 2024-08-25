@@ -126,6 +126,16 @@
             background: linear-gradient(145deg, #4cae4c, #3e8e41);
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
+
+        #snakeButton {
+            background: linear-gradient(145deg, #2a5d2a, #1a3d1a);
+            color: #fff;
+        }
+
+        #snakeButton:hover {
+            background: linear-gradient(145deg, #1a3d1a, #0a2d0a);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -135,6 +145,7 @@
     <button id="hangmanButton">Hangman</button>
     <button id="cookieClickerButton">Cookie Clicker</button>
     <button id="clappyBirdButton">Clappy Bird</button>
+    <button id="snakeButton">Snake</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -183,6 +194,10 @@
 
             document.getElementById('clappyBirdButton').addEventListener('click', () => {
                 window.open('flappy.html', '_blank');
+            });
+
+            document.getElementById('snakeButton').addEventListener('click', () => {
+                window.open('city.html', '_blank');
             });
         });
     </script>
