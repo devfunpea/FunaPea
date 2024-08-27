@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivational Quotes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f3a683, #b8e994);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #app {
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            padding: 20px;
+            position: relative;
+        }
+
+        #quote-container {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f9f9f9;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #quote-text {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin: 0;
+            color: #333;
+        }
+
+        #quote-author {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        button {
+            margin: 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        #save-quote {
+            background: #ffcc00;
+            display: flex;
+            align-items: center;
+        }
+
+        #save-quote.active {
+            background: #f5c518;
+        }
+
+        #save-quote:hover {
+            background: #ffb700;
+            transform: scale(1.05);
+        }
+
+        #restart-quote {
+            background: #28a745;
+        }
+
+        #restart-quote:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        #share-quote {
+            background: #1DA1F2;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #share-quote:hover {
+            background: #0d95e8;
+            transform: scale(1.05);
+        }
+
+      
+        
+
+        h2 {
+            margin-top: 30px;
+            font-size: 1.4em;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            padding: 12px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .star-icon {
+            font-size: 20px;
+            margin-right: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>Motivational Quotes</h1>
+        <div id="quote-container">
+            <p id="quote-text"></p>
+            <p id="quote-author"></p>
+        </div>
+        <button id="save-quote"><span class="star-icon">&#9733;</span> Save Quote</button>
+        <button id="restart-quote">New Quote</button>
+        <h2>Favorites</h2>
+        <ul id="favorites-list"></ul>
+    </div>
+    <script>
+        const quotes = [
+    { text: "I’m not arguing, I’m just passionately expressing my point of view.", author: "Unknown" },
+    { text: "I’m on a whiskey diet. I’ve lost three days already.", author: "Unknown" },
+    { text: "I’m not lazy. I’m on energy-saving mode.", author: "Unknown" },
+    { text: "My bed is a magical place where I remember everything I was supposed to do.", author: "Unknown" },
+    { text: "If you were a vegetable, you’d be a cute-cumber.", author: "Unknown" },
+    { text: "I’m not short. I’m just more down-to-earth than most people.", author: "Unknown" },
+    { text: "Why do I press ‘1’ for English when I’ve been speaking it my whole life?", author: "Unknown" },
+    { text: "If you think nobody cares if you’re alive, try missing a couple of payments.", author: "Earl Wilson" },
+    { text: "I’m not lazy, I’m just on low power mode.", author: "Unknown" },
+    { text: "I’m not a complete idiot. Some parts are missing.", author: "Unknown" },
+    { text: "I used to play piano by ear, but now I use my hands.", author: "Unknown" },
+    { text: "I’m not sure if I’m lazy or just on energy-saving mode.", author: "Unknown" },
+    { text: "If you were a fruit, you’d be a fineapple.", author: "Unknown" },
+    { text: "I’m on a seafood diet. I see food and I eat it.", author: "Unknown" },
+    { text: "I’m not weird. I’m just limited edition.", author: "Unknown" },
+    { text: "My life is a series of awkward moments separated by snacks.", author: "Unknown" },
+    { text: "I’m not short. I’m just more down-to-earth than others.", author: "Unknown" },
+    { text: "If I agreed with you, we’d both be wrong.", author: "Unknown" },
+    { text: "I’m not procrastinating. I’m just really good at waiting.", author: "Unknown" },
+    { text: "I’m not lazy. I’m just on energy-saving mode.", author: "Unknown" },
+    { text: "I’d agree with you, but then we’d both be wrong.", author: "Unknown" },
+    { text: "I’m not a complete idiot. Some parts are missing.", author: "Unknown" },
+    { text: "I’m not lazy, I’m just highly motivated to do nothing.", author: "Unknown" },
+    { text: "If you think nobody cares if you’re alive, try missing a couple of payments.", author: "Earl Wilson" },
+    { text: "I’m not sure if I’m lazy or just on energy-saving mode.", author: "Unknown" },
+    { text: "I have a lot of growing up to do. I realized that the other day inside my fort.", author: "Zach Galifianakis" },
+    { text: "I’m not procrastinating. I’m doing side quests.", author: "Unknown" },
+    { text: "I’m on a seafood diet. I see food and I eat it.", author: "Unknown" },
+    { text: "I’d agree with you, but then we’d both be wrong.", author: "Unknown" },
+    { text: "If I were any lazier, I’d be in a coma.", author: "Unknown" },
+    { text: "I’m not arguing. I’m just explaining why I’m right.", author: "Unknown" },
+    { text: "If you can’t remember my name, just say ‘hi’ to avoid any awkwardness.", author: "Unknown" },
+    { text: "I’m not lazy. I’m just conserving my energy.", author: "Unknown" },
+    { text: "I’m not sure if I’m lazy or just on energy-saving mode.", author: "Unknown" },
+    { text: "I’m not arguing. I’m just explaining why I’m right.", author: "Unknown" },
+    { text: "My wallet is like an onion. When I open it, it makes me cry.", author: "Unknown" },
+    { text: "I’m not short. I’m vertically challenged.", author: "Unknown" },
+    { text: "If you were a fruit, you’d be a fineapple.", author: "Unknown" },
+    { text: "I’m not lazy. I’m just on energy-saving mode.", author: "Unknown" },
+    { text: "I’m not sure if I’m lazy or just on energy-saving mode.", author: "Unknown" },
+    { text: "I’m not weird, I’m just a limited edition.", author: "Unknown" },
+    { text: "I have a split personality,” said Tom, being Frank.", author: "Unknown" },
+    { text: "If I were any more relaxed, I’d be asleep.", author: "Unknown" },
+    { text: "I’m not arguing. I’m just passionately expressing my point of view.", author: "Unknown" },
+    { text: "I’m on a whiskey diet. I’ve lost three days already.", author: "Unknown" },
+    { text: "If you think you’re too small to make a difference, try sleeping with a mosquito.", author: "Unknown" },
+    { text: "I’m not procrastinating. I’m doing side quests.", author: "Unknown" },
+    { text: "I’m not arguing. I’m just explaining why I’m right.", author: "Unknown" },
+    { text: "I’m not lazy, I’m just highly motivated to do nothing.", author: "Unknown" },
+    { text: "I’m not sure if I’m lazy or just on energy-saving mode.", author: "Unknown" },
+    { text: "I’m not a complete idiot. Some parts are missing.", author: "Unknown" },
+    { text: "My brain has too many tabs open.", author: "Unknown" },
+    { text: "I’m not weird, I’m just a limited edition.", author: "Unknown" },
+    { text: "I’m on a diet. I just can’t remember which one.", author: "Unknown" },
+    { text: "I’m not procrastinating. I’m doing side quests.", author: "Unknown" },
+    { text: "My life is a constant battle between my love of food and not wanting to get fat.", author: "Unknown" },
+    { text: "I’m not arguing, I’m just explaining why I’m right.", author: "Unknown" },
+    { text: "If you were a vegetable, you’d be a cute-cumber.", author: "Unknown" },
+    { text: "I’m not short. I’m just concentrated awesome.", author: "Unknown" },
+    { text: "If I were any lazier, I’d be in a coma.", author: "Unknown" },
+    { text: "I’m on a seafood diet. I see food and I eat it.", author: "Unknown" },
+    { text: "I’m not arguing, I’m just passionately expressing my point of view.", author: "Unknown" },
+    { text: "If you can’t remember my name, just say ‘hi’ to avoid any awkwardness.", author: "Unknown" },
+    { text: "I’m not lazy. I’m just on energy-saving mode.", author: "Unknown" },
+    { text: "I’m not procrastinating. I’m doing side quests.", author: "Unknown" }
+];
+
+
+
+
+
+        function getRandomQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            return quotes[randomIndex];
+        }
+
+        function displayQuote() {
+            const quote = getRandomQuote();
+            document.getElementById('quote-text').textContent = `"${quote.text}"`;
+            document.getElementById('quote-author').textContent = `- ${quote.author}`;
+        }
+
+        function saveQuote() {
+            const quoteText = document.getElementById('quote-text').textContent;
+            const favoritesList = document.getElementById('favorites-list');
+            const savedQuotes = JSON.parse(localStorage.getItem('favorites')) || [];
+            
+            if (!savedQuotes.includes(quoteText)) {
+                savedQuotes.push(quoteText);
+                localStorage.setItem('favorites', JSON.stringify(savedQuotes));
+                const listItem = document.createElement('li');
+                listItem.textContent = quoteText;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-btn';
+                deleteButton.onclick = () => deleteQuote(quoteText, listItem);
+                listItem.appendChild(deleteButton);
+                favoritesList.appendChild(listItem);
+            }
+        }
+
+        function deleteQuote(quoteText, listItem) {
+            let savedQuotes = JSON.parse(localStorage.getItem('favorites')) || [];
+            savedQuotes = savedQuotes.filter(q => q !== quoteText);
+            localStorage.setItem('favorites', JSON.stringify(savedQuotes));
+            listItem.remove();
+        }
+
+        function loadFavorites() {
+            const favoritesList = document.getElementById('favorites-list');
+            const savedQuotes = JSON.parse(localStorage.getItem('favorites')) || [];
+            savedQuotes.forEach(quoteText => {
+                const listItem = document.createElement('li');
+                listItem.textContent = quoteText;
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-btn';
+                deleteButton.onclick = () => deleteQuote(quoteText, listItem);
+                listItem.appendChild(deleteButton);
+                favoritesList.appendChild(listItem);
+            });
+        }
+
+    
+
+        document.getElementById('save-quote').addEventListener('click', function() {
+            saveQuote();
+            this.classList.toggle('active');
+        });
+
+        document.getElementById('restart-quote').addEventListener('click', displayQuote);
+
+        // Display the initial quote and load favorites when the page loads
+        displayQuote();
+        loadFavorites();
+    </script>
+</body>
+</html>
