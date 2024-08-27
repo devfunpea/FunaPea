@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #e0e0e0;
+            background-color: #f5f5f5;
             color: #333;
             transition: background-color 0.3s, color 0.3s;
             position: relative;
@@ -77,15 +77,16 @@
             background: linear-gradient(145deg, #333, #212121);
         }
 
-        #openTabButton {
+        .modern-button {
             background: linear-gradient(145deg, #5cb85c, #4cae4c);
             color: #fff;
         }
 
-        #openTabButton:hover {
+        .modern-button:hover {
             background: linear-gradient(145deg, #4cae4c, #3e8e41);
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
+
 
         #ticTacToeButton {
             background: linear-gradient(145deg, #ff5722, #e64a19);
@@ -136,16 +137,27 @@
             background: linear-gradient(145deg, #1a3d1a, #0a2d0a);
             box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
         }
+
+        #lifeQuoteButton {
+            background: linear-gradient(145deg, #007bff, #0056b3);
+            color: #fff;
+        }
+
+        #lifeQuoteButton:hover {
+            background: linear-gradient(145deg, #0056b3, #00409f);
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
     <div id="funpea">Fun Pea</div>
     <button id="darkModeButton">☀️</button>
-    <button id="ticTacToeButton">Tic Tac Toe</button>
-    <button id="hangmanButton">Hangman</button>
-    <button id="cookieClickerButton">Cookie Clicker</button>
-    <button id="clappyBirdButton">Clappy Bird</button>
-    <button id="snakeButton">Snake</button>
+    <button id="ticTacToeButton" class="modern-button">Tic Tac Toe</button>
+    <button id="hangmanButton" class="modern-button">Hangman</button>
+    <button id="cookieClickerButton" class="modern-button">Cookie Clicker</button>
+    <button id="clappyBirdButton" class="modern-button">Clappy Bird</button>
+    <button id="snakeButton" class="modern-button">Snake</button>
+    <button id="lifeQuoteButton" class="modern-button">Life Quote</button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -171,7 +183,7 @@
                     darkModeButton.classList.add('dark-mode');
                     darkModeButton.textContent = '🌙'; // Change to moon emoji
                 } else {
-                    document.body.style.backgroundColor = '#e0e0e0';
+                    document.body.style.backgroundColor = '#f5f5f5';
                     document.body.style.color = '#333';
                     funPeaText.style.color = '#333';
                     darkModeButton.classList.remove('dark-mode');
@@ -179,6 +191,8 @@
                 }
                 localStorage.setItem('darkMode', JSON.stringify(darkMode));
             });
+
+            
 
             document.getElementById('ticTacToeButton').addEventListener('click', () => {
                 window.open('tic-tac-toe.html', '_blank');
@@ -198,6 +212,10 @@
 
             document.getElementById('snakeButton').addEventListener('click', () => {
                 window.open('city.html', '_blank');
+            });
+
+            document.getElementById('lifeQuoteButton').addEventListener('click', () => {
+                window.open('breakout.html', '_blank'); // Update with your Life Quote page URL
             });
         });
     </script>
